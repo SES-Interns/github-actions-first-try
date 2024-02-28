@@ -82,7 +82,9 @@ jobs:
       
       - name: Push to gh-pages branch
         run: git push origin HEAD:gh-pages --force
-        
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+          
   deploy:
     needs: merge
     runs-on: ubuntu-latest
