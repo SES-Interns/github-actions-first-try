@@ -113,7 +113,7 @@ jobs:
         with:
           header: pr-preview
           message: |
-            Leaving comment right here, this is the url of the deployed preview is ${{environment.url}}
+            Leaving comment right here, this is the url of the deployed preview is ${{ steps.deployment.outputs.page_url }}
       
         
   
