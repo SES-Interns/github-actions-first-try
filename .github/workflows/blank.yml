@@ -89,9 +89,10 @@ jobs:
     steps:
       - name: Checkout gh-pages
         uses: actions/checkout@v4
-        with:
-          ref: origin/gh-pages
-    
+
+      - name: Change branch
+        run: git checkout origin/gh-pages
+        
       - name: Install, build, and upload your site
         uses: withastro/action@v2
         with:
