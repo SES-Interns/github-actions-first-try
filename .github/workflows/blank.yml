@@ -78,13 +78,41 @@ jobs:
           else
             echo "Merge failed"
             exit 1
-          fi
-      - name: Leave comment on actual pr
+          fi  
+      
+      - name: Push to gh-pages branch
+        run: git push origin HEAD:gh-pages --force
+        
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: actions/checkout@v4
+        with:
+          ref: origin/gh-pages
+          runs-on: ubuntu-latest
+    
+      - name: Install, build, and upload your site
+        uses: withastro/action@v2
+        with:
+          node-version: 20 # The specific version of Node that should be used to build your site. Defaults to 20. (optional)
+          package-manager: pnpm@8.15.4
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+        
+      - name: Comment url on actual PR
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           header: pr-preview
           message: |
-            Leaving comment right here
+            Leaving comment right here, this is the url of the deployed preview is ${{environment.url}}
       
-      - name: Push to gh-pages branch
-        run: git push origin HEAD:gh-pages --force
+        
+  
