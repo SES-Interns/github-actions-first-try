@@ -61,9 +61,10 @@ jobs:
           if [ "$merge_status" -eq 0 ]; then
             echo "Merge Successful"
             cat Text-Test.txt
+            git log
           else
             echo "Merge failed"
             exit 1
           fi
-
-
+      - name: Push to gh-pages branch
+        run: git push origin HEAD:gh-pages --force
