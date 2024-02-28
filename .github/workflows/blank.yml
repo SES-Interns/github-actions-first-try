@@ -45,7 +45,7 @@ jobs:
         run: cat Text-Test.txt
 
       - name: Show pull request head branch
-        run: echo ${{ github.event.pull_request_head.ref }}
+        run: echo ${{ github.event.pull_request_head.name }}
         
       - name: Merge head branch into base
         run: |
