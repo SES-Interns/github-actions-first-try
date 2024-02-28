@@ -87,6 +87,10 @@ jobs:
     needs: merge
     runs-on: ubuntu-latest
     steps:
+
+      - name: clone repo
+      - uses: actions/checkout@v4
+      
       - name: Fetch all branches
         run: git fetch
         
