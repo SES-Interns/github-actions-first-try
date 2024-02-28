@@ -84,6 +84,9 @@ jobs:
         run: git push origin HEAD:gh-pages --force
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
+        with:
+          # Upload entire repository
+          path: '.'
           
   deploy:
     needs: merge
