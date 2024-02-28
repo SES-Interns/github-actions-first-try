@@ -49,7 +49,7 @@ jobs:
         
       - name: Merge head branch into base
         run: |
-          git merge origin/${{github.event.pull_request.head.ref}} --no-commit --no-ff
+          git merge origin/${{github.event.pull_request.head.ref}} --no-commit --no-ff -allow-unrelated-histories
           merge_status=$?
 
           if [ "$merge_status" -eq 0 ]; then
