@@ -84,13 +84,13 @@ jobs:
         run: git push origin HEAD:gh-pages --force
         
   build:
+    needs: merge
     runs-on: ubuntu-latest
     steps:
       - name: Checkout gh-pages
         uses: actions/checkout@v4
         with:
           ref: origin/gh-pages
-          runs-on: ubuntu-latest
     
       - name: Install, build, and upload your site
         uses: withastro/action@v2
