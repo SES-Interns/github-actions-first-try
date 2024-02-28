@@ -1,0 +1,109 @@
+# This is a basic workflow to help you get started with Actions
+
+name: merge-pr-for-predeploy
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  pull_request:
+    branches: 
+      - main
+
+  # Allows you to run this workflow manually from the Actions tab
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  merge:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    permissions:
+        pull-requests: write
+        actions: write
+        checks: write
+        contents: write
+        deployments: write
+        id-token: write
+        issues: write
+        discussions: write
+        packages: write
+        pages: write
+        repository-projects: write
+        security-events: write
+        statuses: write
+    
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+        with: 
+          ref: ${{ github.event.pull_request.base.sha }}
+          
+      - name: git fetch
+        run: git fetch
+        
+      - name: List branches
+        run: git branch -a
+        
+      - name: Show log of dev branch
+        run: git log --oneline --graph --decorate origin/dev
+
+
+      # Runs a single command using the runners shell
+      - name: Show list of file on actual directory
+        run: ls
+
+      - name: Show text file on actual directory
+        run: cat Text-Test.txt
+
+      - name: Show file from dev branch
+        run: git show origin/dev:Text-Test.txt
+
+
+      - name: Show pull request head branch
+        run: echo "Head branch:${{github.event.pull_request.head.ref}}"
+        
+      - name: Merge head branch into base
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git merge -X theirs origin/${{github.event.pull_request.head.ref}} --no-commit --no-ff --allow-unrelated-histories
+          merge_status=$?
+
+          if [ "$merge_status" -eq 0 ]; then
+            echo "Merge Successful"
+            cat Text-Test.txt
+            git commit -m "Merged branch ${{github.event.pull_request.head.ref}} into ${{github.event.pull_request.base.ref}}"
+            git log
+          else
+            echo "Merge failed"
+            exit 1
+          fi  
+      
+      - name: Push to gh-pages branch
+        run: git push origin HEAD:gh-pages --force
+        
+  deploy:
+    needs: merge
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Fetch all branches
+        run: git fetch
+        
+      - name: List branches
+        run: git branch -a
+        
+      - name: Switch to gh-pages
+        run: git checkout origin/gh-pages
+        
+      - name: Comment url on actual PR
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: pr-preview
+          message: |
+            Leaving comment right here, this is the url of the deployed preview is
+        
+  
