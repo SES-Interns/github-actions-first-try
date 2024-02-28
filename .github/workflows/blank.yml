@@ -86,7 +86,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: actions/checkout@v4
+      - name: Checkout gh-pages
+        uses: actions/checkout@v4
         with:
           ref: origin/gh-pages
           runs-on: ubuntu-latest
