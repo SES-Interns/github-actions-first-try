@@ -44,6 +44,9 @@ jobs:
       - name: Show text file on actual directory
         run: cat Text-Test.txt
 
+      - name: Show pull request head branch
+        run: echo "Head branch ${{ github.event.pull_request_head.ref }}"
+        
       - name: Merge head branch into base
         run: |
           git merge ${{ github.event.pull_request.head.ref }} --no-commit --no-ff
