@@ -49,6 +49,8 @@ jobs:
         
       - name: Merge head branch into base
         run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
           git merge origin/${{github.event.pull_request.head.ref}} --no-commit --no-ff --allow-unrelated-histories
           merge_status=$?
 
