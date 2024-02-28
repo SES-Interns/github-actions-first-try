@@ -82,7 +82,12 @@ jobs:
       
       - name: Push to gh-pages branch
         run: git push origin HEAD:gh-pages --force
-        
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Upload entire repository
+          path: '.'
+          
   deploy:
     needs: merge
     runs-on: ubuntu-latest
@@ -93,6 +98,10 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+
+      - name: clone repo
+        uses: actions/checkout@v4
+      
       - name: Fetch all branches
         run: git fetch
 
