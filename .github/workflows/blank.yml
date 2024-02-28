@@ -90,6 +90,15 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Fetch all branches
+        run: git fetch
+        
+      - name: List branches
+        run: git branch -a
+        
+      - name: Switch to gh-pages
+        run: git checkout origin/gh-pages
+    
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
