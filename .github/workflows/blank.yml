@@ -17,10 +17,12 @@ jobs:
   merge:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
+    permissions:
+        pull-requests: write
+     
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
         with: 
           ref: ${{ github.event.pull_request.base.sha }}
@@ -65,5 +67,12 @@ jobs:
             echo "Merge failed"
             exit 1
           fi
+      - name: Leave comment on actual pr
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: pr-preview
+          message: |
+            Leaving comment right here
+      
       - name: Push to gh-pages branch
         run: git push origin HEAD:gh-pages --force
