@@ -19,7 +19,19 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
         pull-requests: write
-     
+        actions: write
+        checks: write
+        contents: write
+        deployments: write
+        id-token: write
+        issues: write
+        discussions: write
+        packages: write
+        pages: write
+        repository-projects: write
+        security-events: write
+        statuses: write
+    
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
        # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
