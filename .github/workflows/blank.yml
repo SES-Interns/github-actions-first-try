@@ -16,7 +16,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
+  merge:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -33,3 +33,20 @@ jobs:
 
       - name: Show text file on actual directory
         run: cat Text-Test.txt
+
+      - name: Merge head branch into base
+        run: |
+          git merge ${{ github.event.pull_request.head.ref }} --no-commit --no-ff
+          merge_status=$?
+
+           
+
+          if [ "$merge_status" -eq 0 ]; then
+            echo "Merge Successful"
+            cat Text-Test.txt
+          else
+            echo "Merge failed"
+            exit 1
+          fi
+
+
