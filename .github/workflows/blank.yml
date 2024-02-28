@@ -89,7 +89,7 @@ jobs:
     steps:
 
       - name: clone repo
-      - uses: actions/checkout@v4
+        uses: actions/checkout@v4
       
       - name: Fetch all branches
         run: git fetch
