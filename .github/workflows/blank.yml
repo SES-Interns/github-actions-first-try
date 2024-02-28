@@ -82,7 +82,12 @@ jobs:
       
       - name: Push to gh-pages branch
         run: git push origin HEAD:gh-pages --force
-        
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Upload entire repository
+          path: '.'
+          
   deploy:
     needs: merge
     runs-on: ubuntu-latest
@@ -93,10 +98,12 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+
+      - name: clone repo
+        uses: actions/checkout@v4
+      
       - name: Fetch all branches
         run: git fetch
-
-        
         
       - name: List branches
         run: git branch -a
@@ -104,15 +111,11 @@ jobs:
       - name: Switch to gh-pages
         run: git checkout origin/gh-pages
         
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-        
       - name: Comment url on actual PR
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           header: pr-preview
           message: |
-            Leaving comment right here, this is the url of the deployed preview is ${{steps.deployment.outputs.page_url}}
+            Leaving comment right here, this is the url of the deployed preview is
         
   
