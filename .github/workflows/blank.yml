@@ -44,6 +44,10 @@ jobs:
       - name: Show text file on actual directory
         run: cat Text-Test.txt
 
+      - name: Show file from dev branch
+        run: git show origin/dev:Text-Test.txt
+
+
       - name: Show pull request head branch
         run: echo "Head branch:${{github.event.pull_request.head.ref}}"
         
