@@ -61,6 +61,7 @@ jobs:
           if [ "$merge_status" -eq 0 ]; then
             echo "Merge Successful"
             cat Text-Test.txt
+            git commit -m "Merged branch ${{github.event.pull_request.head.ref}} into ${{github.event.pull_request.base.ref}}
             git log
           else
             echo "Merge failed"
