@@ -46,7 +46,7 @@ jobs:
 
       - name: Merge head branch into base
         run: |
-          git merge ${{ github.ref_name }} --no-commit --no-ff
+          git merge ${{ github.event.pull_request.head.ref }} --no-commit --no-ff
           merge_status=$?
 
           if [ "$merge_status" -eq 0 ]; then
